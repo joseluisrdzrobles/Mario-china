@@ -1,0 +1,40 @@
+body {
+    text-align: center;
+}
+
+#heading {
+    font-size: 50px;
+    font-family: Space Grotesk;
+    border-radius: 50px;
+    width: fit-content;
+    margin: 10px auto;
+    
+}
+
+#instructions {
+    font-size: 20px;
+    font-family: space grotesk;
+    border-radius: 50px;
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    font-size: 20px;
+    font-family: Space Grotesk;
+    border-radius: 50px;
+    left: 37%;
+}
+
+#game_button {
+    font-size: 20px;
+    font-family: space grotesk;
+    border-radius: 50px;
+    ;
+}
+
+#console {
+    background: url(imageedit_1_8868100382.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
