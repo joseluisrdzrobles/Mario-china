@@ -11,13 +11,13 @@ function preload() {
 
 function setup() {
 	canvas = createCanvas(1240,336);
-	canvas.parent('game');
+	canvas.parent('canvas');
 
 	instializeInSetup(mario);
 	
 	video = createCapture(VIDEO);
-	video.size(780,480);
-	video.parent('console');
+	video.parent('game_console');
+	video.size(400, 255)
 
 	poseNet = ml5.poseNet(video, modelLoaded);
 	poseNet.on('pose', gotPoses);
@@ -27,7 +27,8 @@ function setup() {
 }
 
 function modelLoaded() {
-	console.log('¡Modelo cargado!');
+	console.log('Model Loaded!');
+	video.loop()
   }
 
   function gotPoses(results)
@@ -42,6 +43,9 @@ function modelLoaded() {
    
 function draw() {
 	game();
+
+	translate(width,0);
+	scale(-1, 1);
 }
 
 

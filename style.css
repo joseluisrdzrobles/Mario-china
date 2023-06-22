@@ -33,8 +33,13 @@ footer {
     ;
 }
 
-#console {
+#game_console {
     background: url(imageedit_1_8868100382.png);
     background-repeat: no-repeat;
     background-position: center;
+    height: 350px;
+}
+
+video {
+    margin-top: 40px;
 }

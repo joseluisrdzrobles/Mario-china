@@ -21,11 +21,11 @@ var gameConfig={
   status: "start", 
   
   // initial lives of mario
-  initialLifes: 4,
+  initialLifes: 3,
 
   // character moves speed
-  moveSpeed: 5,
-  enemyMoveSpeed: 1,
+  moveSpeed: 4,
+  enemyMoveSpeed: 0.5,
 
   // gravity and jump speed for all the characters
   gravity: 1,
@@ -53,6 +53,10 @@ var gameConfig={
 =            Game Status             =
 ====================================*/
 
+noseX = ""
+noseY = ""
+gameStatus = ""
+
 function game(){
 
   instializeInDraw();
@@ -67,7 +71,7 @@ function game(){
     fill(255, 255, 255);
     textSize(40);
     textAlign(CENTER);
-    text("Presiona cualquier tecla de flecha para iniciar ", gameConfig.screenX/2, gameConfig.screenY/2);
+    text("Press 'Play Game' to start", gameConfig.screenX/2, gameConfig.screenY/2);
     textSize(40);
 
     stroke(255);
@@ -97,12 +101,12 @@ function game(){
     fill(255, 255, 255);
     textSize(40);
     textAlign(CENTER);
-    text("FIN DEL JUEGO", gameConfig.screenX/2, gameConfig.screenY/2+105);
+    text("You Lose", gameConfig.screenX/2, gameConfig.screenY/2+105);
     textSize(15);
-    text("Presiona la BARRA ESPACIADORA para reiniciar", gameConfig.screenX/2, gameConfig.screenY/2+135);
+    text("Press SPACE to restart", gameConfig.screenX/2, gameConfig.screenY/2+135);
     textSize(40);
     text(round(gameConfig.scores),gameConfig.screenX/2,gameConfig.screenY/2-35);
-    text("puntuación ",gameConfig.screenX/2,gameConfig.screenY/2);
+    text("Score",gameConfig.screenX/2,gameConfig.screenY/2);
 
     stroke(255);
     strokeWeight(7);
@@ -112,10 +116,13 @@ function game(){
   }
 }  
 
+function startGame() {
+  gameStatus = "start"
+}
 
 // change game status if any key is pressed
 function changeGameStatud(character){
-  if((keyDown(control.up) ||keyDown(control.left)||keyDown(control.right) )&& gameConfig.status==="start") {
+  if(noseX != "" && gameConfig.status==="start" && gameStatus == "start") {
     world_start.play();
     initializeCharacterStatus(mario);
     gameConfig.status= "play";
@@ -211,7 +218,8 @@ function instializeInDraw(){
 // Character get coins
 function getCoins(coin,character){
   if( character.overlap(coin) && character.live && coin.get==false){
-    character.coins+=1;
+    character.coins += 1;
+    mario_coin.play()
     coin.get=true;
   };
 }
@@ -259,7 +267,8 @@ function positionOfCharacter(character){
   // EnemyMushrooms interaction event
   enemyMushrooms.forEach(function(element){
     StepOnEnemy(character,element);
-    if((element.touching.left||element.touching.right)&&character.live&&character.killing===0) die(mario);
+    if ((element.touching.left || element.touching.right) && character.live && character.killing === 0) die(mario);
+    
     
   })
 
@@ -279,13 +288,13 @@ function autoControl(character){
 function manualControl(character){
   
   if(character.live){
-    if(keyDown(control.left)){
+    if(noseX < 130){
       character.velocity.x-=gameConfig.moveSpeed;
       character.changeAnimation('move');
       character.mirrorX(-1);
     }
 
-    if(keyDown(control.right)){
+    if(noseX > 270){
       character.velocity.x+=gameConfig.moveSpeed;
       character.changeAnimation('move');
       character.mirrorX(1);
@@ -300,8 +309,9 @@ function manualControl(character){
 
 /* Movements of character */
 function jumping(character){
-	if( (keyWentDown(control.up)&&character.live) || (touchIsDown&&character.live) ){
-		character.velocity.y+=gameConfig.jump;
+	if( (noseY < 180 &&character.live) || (touchIsDown&&character.live) ){
+    character.velocity.y += gameConfig.jump;
+    mario_jump.play()
 	}
 }
 
@@ -351,6 +361,7 @@ function StepOnEnemy(obj1,obj2){
 		obj2.live=false;
     obj1.killing=30;
     obj1.kills++;
+    mario_kick.play()
     if(obj1.velocity.y>=gameConfig.jump*0.8){
       obj1.velocity.y=gameConfig.jump*0.8;
     }else{
@@ -367,7 +378,8 @@ function die(character){
     character.liveNumber--;
     character.status="dead";
     character.changeAnimation('dead');
-    character.velocity.y-=2;
+  character.velocity.y -= 2;
+  mario_die.play()
 }
 
 // check character status and response to sprite and game status
@@ -378,7 +390,8 @@ function checkStatus(character){
     reviveAfterMusic(character);
   }
   if(character.live==false && character.liveNumber==0){
-    gameConfig.status="gameover"
+    gameConfig.status = "gameover"
+    mario_gameover.play()
   }
 
 }
